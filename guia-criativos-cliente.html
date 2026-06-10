@@ -1,0 +1,1220 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Metodologia de Criativos — Arrive In Digital</title>
+<style>
+  :root {
+    --bg: #000000;
+    --bg-card: #141414;
+    --bg-card2: #1c1c1c;
+    --border: rgba(255,255,255,0.07);
+    --border-light: rgba(255,255,255,0.14);
+    --purple: #7c3aed;
+    --purple-light: #a855f7;
+    --purple-dim: rgba(124,58,237,0.15);
+    --purple-dim2: rgba(124,58,237,0.06);
+    --orange: #f97316;
+    --pink: #e11d48;
+    --accent: #00c896;
+    --accent-dim: rgba(0,200,150,0.12);
+    --accent-dim2: rgba(0,200,150,0.06);
+    --red: #e05454;
+    --red-dim: rgba(224,84,84,0.12);
+    --yellow: #e0b050;
+    --yellow-dim: rgba(224,176,80,0.12);
+    --blue: #5090e0;
+    --blue-dim: rgba(80,144,224,0.12);
+    --text: #ffffff;
+    --text-muted: rgba(255,255,255,0.55);
+    --text-faint: rgba(255,255,255,0.28);
+    --sidebar-w: 268px;
+    --gradient: linear-gradient(135deg, #f97316 0%, #e11d48 45%, #7c3aed 100%);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: 'Inter', 'Segoe UI', system-ui, sans-serif;
+    background:
+      radial-gradient(ellipse at 100% 35%, rgba(76,29,149,0.5) 0%, rgba(76,29,149,0.18) 30%, transparent 60%),
+      radial-gradient(ellipse at 15% 80%, rgba(249,115,22,0.1) 0%, transparent 40%),
+      #000000;
+    background-attachment: fixed;
+    color: var(--text);
+    display: flex;
+    min-height: 100vh;
+    font-size: 14px;
+    line-height: 1.6;
+  }
+  body::before {
+    content: '';
+    position: fixed; inset: 0;
+    background-image:
+      linear-gradient(rgba(255,255,255,0.022) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,255,255,0.022) 1px, transparent 1px);
+    background-size: 60px 60px;
+    pointer-events: none; z-index: 0;
+  }
+
+  /* SIDEBAR */
+  #sidebar {
+    width: var(--sidebar-w);
+    background: rgba(0,0,0,0.93);
+    backdrop-filter: blur(12px);
+    border-right: 1px solid var(--border);
+    position: fixed; top: 0; left: 0; bottom: 0;
+    overflow-y: auto;
+    display: flex; flex-direction: column;
+    z-index: 200;
+    transition: transform 0.28s cubic-bezier(0.4,0,0.2,1);
+  }
+  .sidebar-logo {
+    padding: 24px 20px 20px;
+    border-bottom: 1px solid var(--border);
+    background: linear-gradient(180deg, rgba(249,115,22,0.07) 0%, rgba(124,58,237,0.05) 60%, transparent 100%);
+  }
+  .sidebar-brand-row { display: flex; align-items: center; gap: 10px; margin-bottom: 14px; }
+  .sidebar-a-logo {
+    width: 34px; height: 34px;
+    background: var(--gradient); border-radius: 9px;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0; box-shadow: 0 0 18px rgba(124,58,237,0.4);
+  }
+  .sidebar-a-logo svg { width: 20px; height: 20px; }
+  .brand { font-size: 9px; font-weight: 800; letter-spacing: 0.18em; text-transform: uppercase; color: var(--purple-light); }
+  .product { font-size: 12px; color: var(--text); font-weight: 700; line-height: 1.3; }
+  .doc-badge {
+    display: inline-block; padding: 4px 12px;
+    background: var(--purple-dim); border: 1px solid rgba(124,58,237,0.3);
+    border-radius: 20px; font-size: 11px; font-weight: 700; color: var(--purple-light);
+  }
+  .sidebar-section {
+    padding: 20px 16px 4px;
+    font-size: 9px; font-weight: 800; letter-spacing: 0.16em;
+    text-transform: uppercase; color: var(--text-faint);
+  }
+  .sidebar-link {
+    display: flex; align-items: center; gap: 9px;
+    padding: 9px 16px; color: var(--text-muted);
+    text-decoration: none; font-size: 13px;
+    border-radius: 7px; margin: 1px 8px;
+    transition: all 0.15s; position: relative;
+  }
+  .sidebar-link:hover { background: var(--border); color: var(--text); }
+  .sidebar-link.active { background: var(--purple-dim); color: var(--purple-light); }
+  .sidebar-link.active::before {
+    content: ''; position: absolute; left: 0; top: 20%; bottom: 20%;
+    width: 3px; background: var(--gradient); border-radius: 0 3px 3px 0;
+  }
+  .sidebar-link .icon { font-size: 14px; width: 18px; text-align: center; flex-shrink: 0; }
+
+  /* HAMBURGER */
+  #hamburger {
+    display: none; position: fixed; top: 14px; left: 14px;
+    z-index: 300; width: 40px; height: 40px;
+    background: var(--bg-card); border: 1px solid var(--border);
+    border-radius: 9px; cursor: pointer;
+    flex-direction: column; align-items: center; justify-content: center; gap: 5px;
+  }
+  #hamburger span { display: block; width: 18px; height: 2px; background: var(--text-muted); border-radius: 2px; }
+  #overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.7); z-index: 150; }
+
+  /* MAIN */
+  #main { margin-left: var(--sidebar-w); flex: 1; max-width: calc(100vw - var(--sidebar-w)); padding: 56px 64px; position: relative; z-index: 1; }
+
+  /* HERO */
+  .hero-banner {
+    background:
+      radial-gradient(ellipse at 85% 50%, rgba(124,58,237,0.2) 0%, transparent 55%),
+      radial-gradient(ellipse at 10% 100%, rgba(249,115,22,0.09) 0%, transparent 45%),
+      rgba(20,20,20,0.6);
+    border: 1px solid rgba(124,58,237,0.22); border-radius: 18px;
+    padding: 44px 52px; margin-bottom: 72px; position: relative; overflow: hidden;
+  }
+  .hero-banner::before {
+    content: ''; position: absolute; top: -40px; right: -40px;
+    width: 280px; height: 280px;
+    background: radial-gradient(circle, rgba(225,29,72,0.1) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .hero-eyebrow { font-size: 10px; font-weight: 800; letter-spacing: 0.2em; text-transform: uppercase; color: var(--purple-light); margin-bottom: 12px; }
+  .hero-title {
+    font-size: 38px; font-weight: 900; line-height: 1.12;
+    background: var(--gradient); -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent; background-clip: text; margin-bottom: 12px;
+  }
+  .hero-sub { font-size: 14px; color: var(--text-muted); max-width: 560px; line-height: 1.65; margin-bottom: 30px; }
+  .hero-stats { display: flex; gap: 32px; flex-wrap: wrap; }
+  .hero-stat-val { font-size: 22px; font-weight: 800; color: var(--text); }
+  .hero-stat-label { font-size: 11px; color: var(--text-muted); margin-top: 1px; }
+  .hero-stat-sep { width: 1px; background: var(--border); align-self: stretch; }
+
+  /* SECTIONS */
+  .section { margin-bottom: 88px; scroll-margin-top: 40px; }
+  .section-header { display: flex; align-items: flex-start; gap: 16px; margin-bottom: 32px; padding-bottom: 22px; border-bottom: 1px solid var(--border); }
+  .section-icon { width: 42px; height: 42px; border-radius: 12px; background: var(--gradient); display: flex; align-items: center; justify-content: center; font-size: 18px; flex-shrink: 0; box-shadow: 0 4px 20px rgba(124,58,237,0.3); }
+  .section-title { font-size: 26px; font-weight: 900; color: var(--text); letter-spacing: -0.02em; line-height: 1.2; }
+  .section-sub { font-size: 13px; color: var(--text-muted); margin-top: 5px; }
+
+  /* CARDS */
+  .card { background: var(--bg-card); border: 1px solid var(--border); border-radius: 14px; padding: 22px 26px; margin-bottom: 12px; transition: border-color 0.2s, box-shadow 0.2s; }
+  .card:hover { border-color: var(--border-light); box-shadow: 0 0 0 1px rgba(124,58,237,0.08), 0 8px 32px rgba(0,0,0,0.3); }
+  .card-title { font-size: 10px; font-weight: 800; color: var(--text-faint); text-transform: uppercase; letter-spacing: 0.12em; margin-bottom: 10px; }
+  .card-value { font-size: 22px; font-weight: 900; color: var(--text); }
+  .card-sub { font-size: 12px; color: var(--text-muted); margin-top: 4px; }
+
+  /* GRIDS */
+  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; }
+  .grid-4 { display: grid; grid-template-columns: repeat(4,1fr); gap: 12px; }
+
+  /* TAGS */
+  .tag { display: inline-block; padding: 3px 10px; border-radius: 20px; font-size: 11px; font-weight: 700; }
+  .tag-purple { background: var(--purple-dim); color: var(--purple-light); }
+  .tag-green  { background: var(--accent-dim); color: var(--accent); }
+  .tag-red    { background: var(--red-dim); color: var(--red); }
+  .tag-yellow { background: var(--yellow-dim); color: var(--yellow); }
+  .tag-blue   { background: var(--blue-dim); color: var(--blue); }
+
+  /* HIGHLIGHT */
+  .highlight { border: 1px solid rgba(124,58,237,0.3); background: var(--purple-dim2); border-radius: 14px; padding: 22px 26px; margin: 16px 0; }
+  .highlight.green { border-color: rgba(0,200,150,0.3); background: var(--accent-dim2); }
+  .highlight.yellow { border-color: rgba(224,176,80,0.3); background: rgba(224,176,80,0.05); }
+  .highlight.red { border-color: rgba(224,84,84,0.3); background: var(--red-dim); }
+  .hl-label { font-size: 10px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.12em; color: var(--purple-light); margin-bottom: 8px; }
+  .highlight.green .hl-label { color: var(--accent); }
+  .highlight.yellow .hl-label { color: var(--yellow); }
+  .highlight.red .hl-label { color: var(--red); }
+  .hl-text { font-size: 14px; font-weight: 600; color: var(--text); line-height: 1.7; }
+
+  /* TABLE */
+  .table-wrap { overflow-x: auto; }
+  table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  th { text-align: left; padding: 10px 14px; font-size: 10px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.1em; color: var(--text-faint); border-bottom: 1px solid var(--border); }
+  td { padding: 13px 14px; border-bottom: 1px solid var(--border); color: var(--text); vertical-align: top; }
+  tr:last-child td { border-bottom: none; }
+  tr:hover td { background: var(--bg-card2); }
+
+  /* PASSOS */
+  .passo { background: var(--bg-card); border: 1px solid var(--border); border-left: 3px solid var(--purple); border-radius: 14px; padding: 22px 26px; margin-bottom: 10px; }
+  .passo:hover { box-shadow: 0 0 0 1px rgba(124,58,237,0.12), 0 8px 32px rgba(0,0,0,0.25); }
+  .passo-header { display: flex; align-items: center; gap: 14px; margin-bottom: 12px; }
+  .passo-num { width: 32px; height: 32px; border-radius: 9px; background: var(--gradient); color: #fff; font-weight: 900; font-size: 14px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; box-shadow: 0 2px 12px rgba(124,58,237,0.35); }
+  .passo-title { font-size: 16px; font-weight: 800; }
+  .passo-sub { font-size: 12px; color: var(--text-muted); margin-top: 2px; }
+  .passo-body { font-size: 13px; color: var(--text-muted); line-height: 1.65; }
+  .passo-body ul { margin: 10px 0 0 18px; }
+  .passo-body ul li { margin-bottom: 6px; }
+  .passo-body strong { color: var(--text); }
+
+  /* PILAR CARDS */
+  .pilar { border-radius: 14px; padding: 24px 26px; border: 1px solid var(--border); background: var(--bg-card); position: relative; overflow: hidden; }
+  .pilar::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; }
+  .pilar.p1::before { background: linear-gradient(90deg, #f97316, #e11d48); }
+  .pilar.p2::before { background: linear-gradient(90deg, #7c3aed, #a855f7); }
+  .pilar.p3::before { background: linear-gradient(90deg, #00c896, #0891b2); }
+  .pilar.p4::before { background: linear-gradient(90deg, #e0b050, #f97316); }
+  .pilar-num { font-size: 10px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.14em; color: var(--text-faint); margin-bottom: 8px; }
+  .pilar-title { font-size: 17px; font-weight: 900; margin-bottom: 4px; }
+  .pilar-obj { font-size: 12px; color: var(--text-muted); margin-bottom: 16px; font-style: italic; }
+  .pilar-list { list-style: none; }
+  .pilar-list li { font-size: 13px; color: var(--text-muted); padding: 5px 0; border-bottom: 1px solid var(--border); display: flex; align-items: flex-start; gap: 8px; }
+  .pilar-list li:last-child { border-bottom: none; }
+  .pilar-list li::before { content: '→'; color: var(--text-faint); flex-shrink: 0; margin-top: 1px; }
+
+  /* FORMATO CARDS */
+  .formato { background: var(--bg-card); border: 1px solid var(--border); border-radius: 14px; padding: 22px 26px; margin-bottom: 10px; }
+  .formato-header { display: flex; align-items: center; gap: 12px; margin-bottom: 14px; }
+  .formato-badge { width: 36px; height: 36px; border-radius: 10px; background: var(--purple-dim); border: 1px solid rgba(124,58,237,0.3); display: flex; align-items: center; justify-content: center; font-size: 16px; flex-shrink: 0; }
+  .formato-title { font-size: 15px; font-weight: 800; }
+  .formato-dur { font-size: 11px; color: var(--text-faint); margin-top: 2px; }
+  .formato-trigger { font-size: 12px; color: var(--accent); margin-bottom: 12px; font-weight: 600; }
+  .formato-script { background: var(--bg-card2); border: 1px solid var(--border); border-radius: 10px; padding: 16px 18px; font-size: 12px; color: var(--text-muted); line-height: 1.7; font-family: 'SF Mono', 'Fira Code', monospace; }
+  .fmt-time { color: var(--purple-light); font-weight: 700; }
+  .fmt-txt  { color: var(--accent); font-weight: 600; }
+  .fmt-fala { color: var(--yellow); }
+
+  /* HOOK CARDS */
+  .hook-group { margin-bottom: 24px; }
+  .hook-group-title { font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.14em; color: var(--text-faint); margin-bottom: 10px; display: flex; align-items: center; gap: 8px; }
+  .hook-group-title::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+  .hook-item { background: var(--bg-card); border: 1px solid var(--border); border-radius: 10px; padding: 14px 18px; margin-bottom: 6px; font-size: 13px; color: var(--text); line-height: 1.5; transition: border-color 0.15s; cursor: default; }
+  .hook-item:hover { border-color: rgba(124,58,237,0.3); background: var(--bg-card2); }
+  .hook-formula { font-size: 10px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.1em; color: var(--text-faint); margin-bottom: 5px; }
+
+  /* ELEMENTO CARDS */
+  .elemento { background: var(--bg-card); border: 1px solid var(--border); border-radius: 14px; padding: 22px 26px; margin-bottom: 10px; display: grid; grid-template-columns: 48px 1fr; gap: 18px; align-items: start; }
+  .elemento-num { width: 48px; height: 48px; border-radius: 12px; background: var(--gradient); display: flex; align-items: center; justify-content: center; font-size: 20px; font-weight: 900; color: #fff; flex-shrink: 0; box-shadow: 0 4px 16px rgba(124,58,237,0.3); }
+  .elemento-title { font-size: 16px; font-weight: 800; margin-bottom: 6px; }
+  .elemento-desc { font-size: 13px; color: var(--text-muted); line-height: 1.65; }
+  .elemento-desc ul { margin: 8px 0 0 16px; }
+  .elemento-desc ul li { margin-bottom: 5px; }
+  .elemento-desc strong { color: var(--text); }
+  .elemento-regra { margin-top: 12px; padding: 10px 14px; background: var(--purple-dim2); border: 1px solid rgba(124,58,237,0.2); border-radius: 8px; font-size: 12px; color: var(--purple-light); font-weight: 600; }
+
+  /* CHECKLIST */
+  .check-group { background: var(--bg-card); border: 1px solid var(--border); border-radius: 14px; overflow: hidden; margin-bottom: 10px; }
+  .check-header { padding: 14px 20px; background: var(--bg-card2); border-bottom: 1px solid var(--border); font-size: 12px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.1em; color: var(--text-faint); display: flex; align-items: center; gap: 8px; }
+  .check-item { display: flex; align-items: flex-start; gap: 12px; padding: 11px 20px; border-bottom: 1px solid var(--border); font-size: 13px; color: var(--text-muted); }
+  .check-item:last-child { border-bottom: none; }
+  .check-box { width: 18px; height: 18px; border: 1.5px solid rgba(124,58,237,0.4); border-radius: 5px; flex-shrink: 0; margin-top: 1px; }
+  .check-item strong { color: var(--text); }
+
+  /* PERFORMANCE */
+  .metric-card { background: var(--bg-card); border: 1px solid var(--border); border-radius: 12px; padding: 18px 22px; }
+  .metric-name { font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.1em; color: var(--text-faint); margin-bottom: 6px; }
+  .metric-val { font-size: 22px; font-weight: 900; color: var(--text); margin-bottom: 4px; }
+  .metric-desc { font-size: 12px; color: var(--text-muted); }
+
+  /* DIVIDER */
+  .divider { height: 1px; background: var(--border); margin: 24px 0; }
+  .lv-row { display: flex; gap: 8px; margin-bottom: 8px; font-size: 13px; }
+  .lv-key { color: var(--text-muted); min-width: 200px; flex-shrink: 0; }
+  .lv-val { color: var(--text); font-weight: 500; }
+
+  /* ANTES/DEPOIS */
+  .comp-row { display: grid; grid-template-columns: 1fr 1fr; gap: 0; border-radius: 12px; overflow: hidden; border: 1px solid var(--border); margin-bottom: 10px; }
+  .comp-before { padding: 18px 20px; background: rgba(224,84,84,0.06); border-right: 1px solid var(--border); }
+  .comp-after  { padding: 18px 20px; background: rgba(0,200,150,0.05); }
+  .comp-label { font-size: 10px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 8px; }
+  .comp-label.bad  { color: var(--red); }
+  .comp-label.good { color: var(--accent); }
+  .comp-text { font-size: 13px; color: var(--text-muted); line-height: 1.6; }
+
+  /* CALENDAR */
+  .cal-row { display: grid; grid-template-columns: 80px 1fr 1fr 160px 140px; gap: 0; border-bottom: 1px solid var(--border); }
+  .cal-row.header { background: var(--bg-card2); }
+  .cal-cell { padding: 11px 14px; font-size: 12px; color: var(--text-muted); }
+  .cal-row.header .cal-cell { font-size: 10px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.1em; color: var(--text-faint); }
+  .cal-day { font-weight: 700; color: var(--text); }
+  .cal-pilar { font-weight: 600; }
+
+  ::-webkit-scrollbar { width: 4px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 2px; }
+
+  @media (max-width: 900px) {
+    #hamburger { display: flex; }
+    #sidebar { transform: translateX(-100%); }
+    #sidebar.open { transform: translateX(0); }
+    #overlay.open { display: block; }
+    #main { margin-left: 0; max-width: 100vw; padding: 72px 20px 40px; }
+    .grid-4 { grid-template-columns: 1fr 1fr; }
+    .grid-3 { grid-template-columns: 1fr 1fr; }
+    .grid-2 { grid-template-columns: 1fr; }
+    .hero-title { font-size: 26px; }
+    .hero-banner { padding: 28px 24px; }
+    .section-title { font-size: 20px; }
+    .elemento { grid-template-columns: 1fr; }
+    .comp-row { grid-template-columns: 1fr; }
+    .cal-row { grid-template-columns: 1fr; }
+  }
+  @media (max-width: 540px) {
+    .grid-4, .grid-3, .grid-2 { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<button id="hamburger" aria-label="Menu" onclick="toggleSidebar()">
+  <span></span><span></span><span></span>
+</button>
+<div id="overlay" onclick="toggleSidebar()"></div>
+
+<nav id="sidebar">
+  <div class="sidebar-logo">
+    <div class="sidebar-brand-row">
+      <div class="sidebar-a-logo">
+        <svg viewBox="0 0 24 24" fill="none">
+          <path d="M12 3L21 20H3L12 3Z" fill="white" opacity="0.95"/>
+          <path d="M8.5 14.5H15.5" stroke="#7c3aed" stroke-width="2" stroke-linecap="round"/>
+        </svg>
+      </div>
+      <div>
+        <div class="brand">Arrive In Digital</div>
+        <div class="product">Metodologia<br>de Criativos</div>
+      </div>
+    </div>
+    <div class="doc-badge">Guia para o Cliente</div>
+  </div>
+
+  <div class="sidebar-section">Visão Geral</div>
+  <a class="sidebar-link active" href="#overview"><span class="icon">🗺</span>O que é isso</a>
+  <a class="sidebar-link" href="#pilares"><span class="icon">🏛</span>Os 4 Pilares</a>
+
+  <div class="sidebar-section">Como Fazer</div>
+  <a class="sidebar-link" href="#elementos"><span class="icon">⚙️</span>Os 6 Elementos</a>
+  <a class="sidebar-link" href="#formatos"><span class="icon">🎬</span>Os 7 Formatos</a>
+  <a class="sidebar-link" href="#hooks"><span class="icon">🪝</span>Banco de Hooks</a>
+
+  <div class="sidebar-section">Operação</div>
+  <a class="sidebar-link" href="#checklist"><span class="icon">✅</span>Checklist de Produção</a>
+  <a class="sidebar-link" href="#calendario"><span class="icon">📅</span>Calendário Semanal</a>
+  <a class="sidebar-link" href="#performance"><span class="icon">📊</span>Métricas</a>
+</nav>
+
+<main id="main">
+
+  <!-- HERO -->
+  <div class="hero-banner">
+    <div class="hero-eyebrow">Arrive In Digital · Metodologia de Criativos</div>
+    <div class="hero-title">Como criar conteúdo<br>que vende imóveis</div>
+    <div class="hero-sub">Um sistema completo para produzir vídeos, carrosséis e posts que geram leads reais — com formatos prontos, roteiros e métricas para saber o que está funcionando.</div>
+    <div class="hero-stats">
+      <div>
+        <div class="hero-stat-val">4</div>
+        <div class="hero-stat-label">Pilares de conteúdo</div>
+      </div>
+      <div class="hero-stat-sep"></div>
+      <div>
+        <div class="hero-stat-val">7</div>
+        <div class="hero-stat-label">Formatos com roteiro</div>
+      </div>
+      <div class="hero-stat-sep"></div>
+      <div>
+        <div class="hero-stat-val">6</div>
+        <div class="hero-stat-label">Elementos por peça</div>
+      </div>
+      <div class="hero-stat-sep"></div>
+      <div>
+        <div class="hero-stat-val" style="color:var(--accent)">30+</div>
+        <div class="hero-stat-label">Hooks prontos para usar</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- OVERVIEW -->
+  <section class="section" id="overview">
+    <div class="section-header">
+      <div class="section-icon">🗺</div>
+      <div>
+        <div class="section-title">O que é essa metodologia</div>
+        <div class="section-sub">Por que seguir um sistema — e o que muda quando você segue</div>
+      </div>
+    </div>
+
+    <div class="highlight">
+      <div class="hl-label">O problema mais comum</div>
+      <div class="hl-text">Corretores postam imóvel, não recebem DM, concluem que "redes sociais não funcionam". O problema quase nunca é o imóvel — é que o conteúdo foi feito sem sistema: sem hook, sem formato certo, sem CTA, sem follow-up.</div>
+    </div>
+
+    <div class="grid-2" style="margin-top:16px">
+      <div class="comp-row" style="border-radius:14px;margin-bottom:0">
+        <div class="comp-before">
+          <div class="comp-label bad">❌ Sem sistema</div>
+          <div class="comp-text" style="font-size:12px">
+            Postar quando tem imóvel novo<br>
+            Foto com "Imóvel à venda — 3 quartos"<br>
+            Nenhum CTA claro<br>
+            Responder comentário quando lembra<br>
+            Não saber por que funcionou ou não
+          </div>
+        </div>
+        <div class="comp-after">
+          <div class="comp-label good">✅ Com sistema</div>
+          <div class="comp-text" style="font-size:12px">
+            Postar 4–5×/semana com pauta definida<br>
+            Hook que para o scroll nos primeiros 3s<br>
+            Palavra-chave que gera DM automático<br>
+            Follow-up em menos de 2h<br>
+            Métricas para saber o que repetir
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">A lógica do sistema</div>
+        <div style="font-size:13px;color:var(--text-muted);line-height:1.7;margin-bottom:14px">O sistema tem três camadas que funcionam juntas. Pular uma das três quebra a cadeia.</div>
+        <div class="lv-row"><div class="lv-key">Camada 1 — Estratégia</div><div class="lv-val">O que postar (4 pilares)</div></div>
+        <div class="lv-row"><div class="lv-key">Camada 2 — Produção</div><div class="lv-val">Como fazer (6 elementos)</div></div>
+        <div class="lv-row"><div class="lv-key">Camada 3 — Execução</div><div class="lv-val">Qual estrutura usar (7 formatos)</div></div>
+      </div>
+    </div>
+
+    <div class="highlight green" style="margin-top:12px">
+      <div class="hl-label">Premissa central</div>
+      <div class="hl-text">Conteúdo de listagem (imóvel) sem os outros pilares não converte — porque a audiência não confia em quem só aparece para vender. Os 4 pilares juntos criam o ciclo completo: <strong>audiência → autoridade → confiança → venda</strong>.</div>
+    </div>
+  </section>
+
+  <!-- PILARES -->
+  <section class="section" id="pilares">
+    <div class="section-header">
+      <div class="section-icon">🏛</div>
+      <div>
+        <div class="section-title">Os 4 Pilares de Conteúdo</div>
+        <div class="section-sub">O que postar — e por quê cada pilar existe</div>
+      </div>
+    </div>
+
+    <div class="grid-2">
+      <div class="pilar p1">
+        <div class="pilar-num">Pilar 01</div>
+        <div class="pilar-title">Personalidade</div>
+        <div class="pilar-obj">O cliente compra do corretor, não do imóvel.</div>
+        <ul class="pilar-list">
+          <li>Sobre mim / trajetória no mercado</li>
+          <li>Dia na vida do corretor (bastidores)</li>
+          <li>Hobbies, rotina, perspectiva pessoal</li>
+          <li>Opiniões sobre o mercado imobiliário</li>
+          <li>Shows de reforma favoritos, estilo de vida</li>
+        </ul>
+      </div>
+      <div class="pilar p2">
+        <div class="pilar-num">Pilar 02</div>
+        <div class="pilar-title">Mercado Local</div>
+        <div class="pilar-obj">Você é O especialista da região. Não apenas mais um corretor.</div>
+        <ul class="pilar-list">
+          <li>Novos restaurantes, comércio e eventos do bairro</li>
+          <li>Comparativo de bairros e perfis de cada região</li>
+          <li>Dados de mercado: preço médio, valorização</li>
+          <li>Notícias que afetam o comprador (juros, lançamentos)</li>
+          <li>O que mudou na cidade nos últimos meses</li>
+        </ul>
+      </div>
+      <div class="pilar p3">
+        <div class="pilar-num">Pilar 03</div>
+        <div class="pilar-title">Educacional</div>
+        <div class="pilar-obj">Quem educa lidera. Confiança é construída antes da venda.</div>
+        <ul class="pilar-list">
+          <li>Como funciona o financiamento na prática</li>
+          <li>Como fazer a pré-aprovação de crédito</li>
+          <li>O que verificar antes de comprar um imóvel</li>
+          <li>Mitos: "precisa de 20% de entrada?", "primavera é melhor?"</li>
+          <li>Erros comuns de compradores e vendedores</li>
+        </ul>
+      </div>
+      <div class="pilar p4">
+        <div class="pilar-num">Pilar 04</div>
+        <div class="pilar-title">Listagem</div>
+        <div class="pilar-obj">O imóvel em si. Geração de lead direto.</div>
+        <ul class="pilar-list">
+          <li>Tour do imóvel (POV, drone, walk & talk)</li>
+          <li>Feature única em destaque (a piscina, a vista, a cozinha)</li>
+          <li>Comparativo: aluguel vs. prestação</li>
+          <li>Tour do bairro onde o imóvel fica</li>
+          <li>Imóveis de outros corretores (com permissão)</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="card" style="margin-top:16px">
+      <div class="card-title">Distribuição semanal recomendada</div>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Perfil</th>
+              <th>Personalidade</th>
+              <th>Mercado Local</th>
+              <th>Educacional</th>
+              <th>Listagem</th>
+              <th>Total/semana</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Iniciando</strong> <span style="color:var(--text-faint);font-size:11px">(0–6 meses)</span></td>
+              <td>2×</td><td>2×</td><td>1×</td><td>1–2×</td>
+              <td><span class="tag tag-purple">6–7×</span></td>
+            </tr>
+            <tr>
+              <td><strong>Crescendo</strong> <span style="color:var(--text-faint);font-size:11px">(6–18 meses)</span></td>
+              <td>1×</td><td>1–2×</td><td>1–2×</td><td>2–3×</td>
+              <td><span class="tag tag-purple">5–8×</span></td>
+            </tr>
+            <tr>
+              <td><strong>Estabelecido</strong> <span style="color:var(--text-faint);font-size:11px">(18+ meses)</span></td>
+              <td>1×</td><td>1×</td><td>1×</td><td>3–4×</td>
+              <td><span class="tag tag-purple">6–7×</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- 6 ELEMENTOS -->
+  <section class="section" id="elementos">
+    <div class="section-header">
+      <div class="section-icon">⚙️</div>
+      <div>
+        <div class="section-title">Os 6 Elementos de um Reel que Converte</div>
+        <div class="section-sub">Toda peça de conteúdo precisa ter os 6 — pular um quebra a cadeia</div>
+      </div>
+    </div>
+
+    <div class="highlight yellow" style="margin-bottom:20px">
+      <div class="hl-label">De onde vem essa fórmula</div>
+      <div class="hl-text">Coffee & Contracts — plataforma de referência para marketing imobiliário nos EUA — documenta que reels com essa estrutura completa geram até <strong>500k views, 4.400 comentários e 8.000 compartilhamentos</strong> de um único post filmado com celular.</div>
+    </div>
+
+    <div class="elemento">
+      <div class="elemento-num">1</div>
+      <div>
+        <div class="elemento-title">Visual Hook — os primeiros 3 segundos</div>
+        <div class="elemento-desc">
+          O clip de abertura é o que para o scroll. Se não parar nos 3 primeiros segundos, o vídeo morreu.
+          <ul>
+            <li><strong>Moving hook:</strong> câmera caminha por corredor em direção à cena principal</li>
+            <li><strong>Reveal hook:</strong> começa fechado (porta, obstáculo) e abre para revelar o espaço</li>
+            <li><strong>Drone hook:</strong> vista aérea descendo sobre o imóvel</li>
+            <li><strong>Detail hook:</strong> close extremo em detalhe de acabamento, vista ou piscina</li>
+          </ul>
+          <div class="elemento-regra">Regras: filmar em 1x, ambas as mãos no celular, clips de 1 segundo na edição, abrir com o melhor clip — nunca guardar o melhor para o final.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="elemento">
+      <div class="elemento-num">2</div>
+      <div>
+        <div class="elemento-title">Text Hook — o texto na tela</div>
+        <div class="elemento-desc">
+          O texto aparece desde o primeiro frame. É o segundo gancho, junto com o visual.
+          <ul>
+            <li>Fonte simples, limpa, centralizada — sem animações ou cores chamativas</li>
+            <li>Sempre incluir o nome da cidade (SEO no algoritmo)</li>
+            <li>Falar com o viewer ("você"), não descrever o imóvel</li>
+          </ul>
+        </div>
+        <div style="margin-top:12px">
+          <div class="comp-row" style="border-radius:10px;margin-bottom:0">
+            <div class="comp-before">
+              <div class="comp-label bad">❌ Não funciona</div>
+              <div class="comp-text">"IMÓVEL À VENDA<br>3 quartos · R$ 580.000"</div>
+            </div>
+            <div class="comp-after">
+              <div class="comp-label good">✅ Funciona</div>
+              <div class="comp-text">"POV: você acorda todo dia com essa vista.<br>[Cidade] — 3 quartos"</div>
+            </div>
+          </div>
+        </div>
+        <div class="elemento-regra" style="margin-top:10px">Criar o reel dentro do Instagram ou do app Edits — não no Canva. Conteúdo criado no app parece orgânico; upload externo parece anúncio e perde alcance.</div>
+      </div>
+    </div>
+
+    <div class="elemento">
+      <div class="elemento-num">3</div>
+      <div>
+        <div class="elemento-title">Auditory Hook — o áudio</div>
+        <div class="elemento-desc">
+          A música consolida a emoção criada pelo visual.
+          <ul>
+            <li>Áudio trending com poucas utilizações = vantagem extra no algoritmo</li>
+            <li>Combinar a vibe: clássico/suave para imóvel premium, animado para popular</li>
+            <li>Sem silêncio no início — começar a falar ou a música no primeiro frame</li>
+          </ul>
+          <div class="elemento-regra">⚠️ "Millennial Pause": os 2–3 segundos de silêncio antes de começar a falar afundam o hook. O algoritmo mede retenção nos primeiros 3 segundos — qualquer pausa é perda de audiência.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="elemento">
+      <div class="elemento-num">4</div>
+      <div>
+        <div class="elemento-title">Caption com SEO — a legenda</div>
+        <div class="elemento-desc">
+          A legenda continua o hook e entrega contexto para quem se interessou.
+          <div style="margin-top:10px;background:var(--bg-card2);border:1px solid var(--border);border-radius:8px;padding:14px 16px;font-size:12px;font-family:monospace;color:var(--text-muted)">
+            [Frase que continua o hook]<br>
+            [2–3 linhas de benefícios do imóvel]<br>
+            [Dado concreto: preço, metragem, bairro]<br>
+            [CTA claro]<br><br>
+            #[cidade]imoveis #corretorde[cidade] #[bairro] #apartamentoavenda
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="elemento">
+      <div class="elemento-num">5</div>
+      <div>
+        <div class="elemento-title">CTA — chamada para ação</div>
+        <div class="elemento-desc">
+          Escolha um. Só um. O viewer não executa dois comandos.
+          <ul>
+            <li><strong>"Comenta QUERO que eu te mando o link"</strong> → gera comentário + DM</li>
+            <li><strong>"Chama no Direct"</strong> → direto para conversa</li>
+            <li><strong>"Link na bio"</strong> → para quem tem site ou LP</li>
+          </ul>
+          <div class="elemento-regra">Usar sempre uma palavra-chave específica (QUERO, INFO, VISITA). Isso permite automação de resposta via ManyChat — quando o volume crescer.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="elemento">
+      <div class="elemento-num">6</div>
+      <div>
+        <div class="elemento-title">Follow-up — onde a venda acontece</div>
+        <div class="elemento-desc">
+          O reel gera o lead. O follow-up fecha a venda. São etapas separadas.
+          <ul>
+            <li>Responder comentário + entrar no Direct em até 2 horas</li>
+            <li>No Direct: enviar o link do imóvel → fazer 1 pergunta aberta</li>
+            <li>Objetivo: vender a <strong>visita</strong>, não o imóvel</li>
+            <li>Nunca jogar preço sem contexto, nunca sumir após o link</li>
+          </ul>
+          <div class="elemento-regra">Quem comenta ou manda mensagem já declarou interesse. Lead quente esfria rápido — resposta em até 2h é regra.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 7 FORMATOS -->
+  <section class="section" id="formatos">
+    <div class="section-header">
+      <div class="section-icon">🎬</div>
+      <div>
+        <div class="section-title">Os 7 Formatos com Roteiro</div>
+        <div class="section-sub">Qual estrutura usar para cada tipo de imóvel ou objetivo</div>
+      </div>
+    </div>
+
+    <div class="card" style="margin-bottom:20px">
+      <div class="card-title">Matriz de decisão — qual formato usar</div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Situação</th><th>Formato</th><th>Hook</th></tr></thead>
+          <tbody>
+            <tr><td>Imóvel com visual forte</td><td>Reveal ou Feature Única</td><td>Curiosidade</td></tr>
+            <tr><td>Imóvel com localização boa</td><td>Tour do Bairro</td><td>Especificidade</td></tr>
+            <tr><td>Imóvel com preço competitivo</td><td>Comparativo de Preço</td><td>Dor</td></tr>
+            <tr><td>Imóvel de alto padrão</td><td>Drone de Abertura</td><td>Lifestyle / POV</td></tr>
+            <tr><td>Imóvel comum, difícil de destacar</td><td>Walk & Talk</td><td>Contradição</td></tr>
+            <tr><td>Sem imóvel novo para postar</td><td>Educacional</td><td>Erro / Alerta</td></tr>
+            <tr><td>Construindo audiência nova</td><td>Personalidade + Local</td><td>—</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="formato">
+      <div class="formato-header">
+        <div class="formato-badge">🚪</div>
+        <div>
+          <div class="formato-title">Formato 1 — Reveal</div>
+          <div class="formato-dur">15–20 segundos · 9:16 vertical</div>
+        </div>
+      </div>
+      <div class="formato-trigger">✦ Usar quando: o imóvel tem um elemento surpresa — vista, pé direito alto, espaço inesperado</div>
+      <div class="formato-script">
+<span class="fmt-time">[0–3s]</span> Clip do lado de fora ou detalhe neutro<br>
+<span class="fmt-txt">TEXTO NA TELA:</span> <span class="fmt-fala">"Você não vai acreditar no que tem atrás dessa porta"</span><br><br>
+<span class="fmt-time">[3–12s]</span> Porta abre → walking shot revelando o espaço principal<br>
+Música: build-up que cresce junto com o reveal<br><br>
+<span class="fmt-time">[12–20s]</span> 2–3 ambientes em clips de 1s cada<br>
+<span class="fmt-txt">TEXTO:</span> <span class="fmt-fala">"[Bairro], [Cidade] — 3 quartos — consulte disponibilidade"</span><br><br>
+<span class="fmt-txt">CTA:</span> <span class="fmt-fala">"Comenta QUERO e te mando o link completo"</span>
+      </div>
+    </div>
+
+    <div class="formato">
+      <div class="formato-header">
+        <div class="formato-badge">🎙</div>
+        <div>
+          <div class="formato-title">Formato 2 — Walk & Talk</div>
+          <div class="formato-dur">30–45 segundos · 9:16 vertical</div>
+        </div>
+      </div>
+      <div class="formato-trigger">✦ Usar quando: o corretor tem carisma e o imóvel precisa de contexto para brilhar</div>
+      <div class="formato-script">
+<span class="fmt-time">[0–3s]</span> Corretor na porta, olhando para câmera<br>
+<span class="fmt-fala">"Deixa eu te mostrar por que esse apartamento sumiu do mercado em 4 dias."</span><br><br>
+<span class="fmt-time">[3–30s]</span> Caminha por 3 ambientes-chave — 1 frase de benefício por ambiente<br>
+<span class="fmt-fala">Sala: "Olha essa luz natural de manhã — isso não tem preço."</span><br>
+<span class="fmt-fala">Varanda: "Pensa num churrasco de domingo sem sair de casa."</span><br>
+<span class="fmt-fala">Suíte: "E a suíte... fala sério."</span><br><br>
+<span class="fmt-time">[30–45s]</span> Virada para câmera no melhor ângulo<br>
+<span class="fmt-fala">"Ainda tem uma unidade. Chama no Direct — agenda visita."</span>
+      </div>
+    </div>
+
+    <div class="formato">
+      <div class="formato-header">
+        <div class="formato-badge">⚖️</div>
+        <div>
+          <div class="formato-title">Formato 3 — Comparativo de Preço</div>
+          <div class="formato-dur">15–30 segundos · 9:16 vertical</div>
+        </div>
+      </div>
+      <div class="formato-trigger">✦ Usar quando: o lead ainda está no aluguel e acha que não tem condições de comprar</div>
+      <div class="formato-script">
+<span class="fmt-time">[0–3s]</span> Texto na tela (fundo neutro ou imagem genérica)<br>
+<span class="fmt-txt">TEXTO:</span> <span class="fmt-fala">"Com R$2.800/mês de aluguel, você fica com o quê?"</span><br><br>
+<span class="fmt-time">[3–15s]</span> Corte abrupto para o imóvel<br>
+<span class="fmt-txt">TEXTO:</span> <span class="fmt-fala">"Com R$2.200/mês de prestação, você tem ISSO:"</span><br>
+Tour rápido: sala → varanda → área de lazer<br><br>
+<span class="fmt-time">[15–30s]</span> Detalhe final do ambiente mais impactante<br>
+<span class="fmt-txt">TEXTO:</span> <span class="fmt-fala">"[Cidade] — Simule seu financiamento. Link na bio."</span>
+      </div>
+    </div>
+
+    <div class="formato">
+      <div class="formato-header">
+        <div class="formato-badge">🔍</div>
+        <div>
+          <div class="formato-title">Formato 4 — Feature Única</div>
+          <div class="formato-dur">10–15 segundos · 9:16 vertical</div>
+        </div>
+      </div>
+      <div class="formato-trigger">✦ Usar quando: o imóvel tem 1 elemento excepcional (vista, piscina, cozinha, jardim)</div>
+      <div class="formato-script">
+<span class="fmt-time">[0–10s]</span> 5–8 clips de 1s cada, todos do MESMO ambiente/feature<br>
+em vários ângulos e momentos<br><br>
+<span class="fmt-txt">TEXTO NA TELA</span> <span style="color:var(--text-muted)">(aparece em 2s, fica até o fim):</span><br>
+<span class="fmt-fala">"A piscina que vai mudar seu final de semana."</span><br><br>
+<span class="fmt-time">[10–15s]</span> Clip com mais contexto (área completa ou vista geral)<br>
+<span class="fmt-txt">TEXTO:</span> <span class="fmt-fala">"[Bairro] — [metragem] — consulte disponibilidade"</span>
+      </div>
+    </div>
+
+    <div class="formato">
+      <div class="formato-header">
+        <div class="formato-badge">🚁</div>
+        <div>
+          <div class="formato-title">Formato 5 — Drone de Abertura</div>
+          <div class="formato-dur">20–30 segundos · 9:16 vertical</div>
+        </div>
+      </div>
+      <div class="formato-trigger">✦ Usar quando: alto padrão, condomínio grande ou localização privilegiada</div>
+      <div class="formato-script">
+<span class="fmt-time">[0–5s]</span> Drone descendo sobre o condomínio / fachada<br>
+<span class="fmt-txt">TEXTO:</span> <span class="fmt-fala">"Esse condomínio tem lista de espera."</span><br>
+<span class="fmt-fala">"Mas ainda tem 1 unidade disponível."</span><br><br>
+<span class="fmt-time">[5–20s]</span> Tour interno — sala, varanda, vista<br>
+Trilha: ambiente premium, sem letra<br><br>
+<span class="fmt-time">[20–30s]</span> Volta para drone — contexto de localização<br>
+<span class="fmt-txt">TEXTO:</span> <span class="fmt-fala">"[Bairro], [Cidade] — [X] quartos — R$[valor]"</span><br>
+<span class="fmt-txt">CTA:</span> <span class="fmt-fala">"Chama no WhatsApp: [número]"</span>
+      </div>
+    </div>
+
+    <div class="formato">
+      <div class="formato-header">
+        <div class="formato-badge">🎓</div>
+        <div>
+          <div class="formato-title">Formato 6 — Educacional</div>
+          <div class="formato-dur">30–60 segundos · 9:16 vertical</div>
+        </div>
+      </div>
+      <div class="formato-trigger">✦ Usar quando: não tem imóvel novo para mostrar — ou para construir autoridade antes de lançar</div>
+      <div class="formato-script">
+<span class="fmt-time">[0–3s]</span> Hook de erro ou alerta<br>
+<span class="fmt-fala">"Para de visitar imóvel antes de verificar essas 3 coisas."</span><br><br>
+<span class="fmt-time">[3–45s]</span> 3 dicas práticas — 1 por vez, ritmo rápido<br>
+Dica 1 / Dica 2 / Dica 3<br><br>
+<span class="fmt-time">[45–60s]</span> Posicionamento + CTA<br>
+<span class="fmt-fala">"Sou [nome], corretor em [Cidade]. Se você está procurando</span><br>
+<span class="fmt-fala">imóvel e quer evitar esses erros — manda mensagem."</span>
+      </div>
+    </div>
+
+    <div class="formato">
+      <div class="formato-header">
+        <div class="formato-badge">🏙</div>
+        <div>
+          <div class="formato-title">Formato 7 — Tour do Bairro</div>
+          <div class="formato-dur">30–45 segundos · 9:16 vertical</div>
+        </div>
+      </div>
+      <div class="formato-trigger">✦ Usar quando: a localização é o maior diferencial do imóvel</div>
+      <div class="formato-script">
+<span class="fmt-time">[0–3s]</span> Hook de localização<br>
+<span class="fmt-txt">TEXTO:</span> <span class="fmt-fala">"Por que tanta gente está se mudando para [Bairro]?"</span><br><br>
+<span class="fmt-time">[3–35s]</span> 4–5 pontos do bairro, 5–7s cada<br>
+• Café / padaria local &nbsp;• Parque / academia<br>
+• Comércio próximo &nbsp;• Vista / atmosfera da rua<br><br>
+<span class="fmt-time">[35–45s]</span> Imóvel disponível no bairro<br>
+<span class="fmt-txt">TEXTO:</span> <span class="fmt-fala">"E olha o que você encontra por aqui por [faixa de preço]..."</span><br>
+<span class="fmt-txt">CTA:</span> <span class="fmt-fala">"Comenta [BAIRRO] que te mando as opções disponíveis"</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- HOOKS -->
+  <section class="section" id="hooks">
+    <div class="section-header">
+      <div class="section-icon">🪝</div>
+      <div>
+        <div class="section-title">Banco de Hooks</div>
+        <div class="section-sub">30+ ganchos prontos — texto na tela e fala — organizados por objetivo</div>
+      </div>
+    </div>
+
+    <div class="highlight" style="margin-bottom:20px">
+      <div class="hl-label">Por que o hook é o elemento mais importante</div>
+      <div class="hl-text">Vídeos com hook forte nos primeiros 3 segundos têm <strong>65% mais retenção</strong> que os com abertura fraca. O algoritmo do Instagram mede quanto do vídeo as pessoas assistiram — retenção alta = mais distribuição = mais alcance gratuito.</div>
+    </div>
+
+    <div class="hook-group">
+      <div class="hook-group-title">Curiosidade</div>
+      <div class="hook-item">
+        <div class="hook-formula">Fórmula: [mistério] + [imóvel específico]</div>
+        "Você não vai acreditar no que tem atrás dessa porta"
+      </div>
+      <div class="hook-item">"Esse imóvel sumiu do mercado em 4 dias. Vou te mostrar por quê."</div>
+      <div class="hook-item">"O que R$[valor] compra em [Cidade] em 2026 (vai te surpreender)"</div>
+      <div class="hook-item">"Eu não devia mostrar isso ainda, mas..."</div>
+    </div>
+
+    <div class="hook-group">
+      <div class="hook-group-title">POV — Lifestyle</div>
+      <div class="hook-item">
+        <div class="hook-formula">Fórmula: POV: [ação do morador] + [detalhe específico do imóvel]</div>
+        "POV: você acorda todo dia com essa vista. [Cidade] — 3 quartos."
+      </div>
+      <div class="hook-item">"POV: você chega em casa e tem isso te esperando. [Bairro], [Cidade]."</div>
+      <div class="hook-item">"POV: seu domingo começa com café na varanda e essa vista."</div>
+      <div class="hook-item">"Imagina acordar todo dia com esse silêncio. Isso existe em [Cidade]."</div>
+    </div>
+
+    <div class="hook-group">
+      <div class="hook-group-title">Dor / Situação</div>
+      <div class="hook-item">"Você ainda paga aluguel todo mês sem acumular nada?"</div>
+      <div class="hook-item">"Cansado de visitar imóvel bonito na foto e decepção na visita?"</div>
+      <div class="hook-item">"Procurando imóvel há meses e nada encaixa no orçamento?"</div>
+      <div class="hook-item">"Você ainda acha que precisa de 20% de entrada pra comprar?"</div>
+    </div>
+
+    <div class="hook-group">
+      <div class="hook-group-title">Especificidade — Alta Conversão</div>
+      <div class="hook-item">
+        <div class="hook-formula">Fórmula: [tipo] + [metragem] + [bairro] + [dado concreto]</div>
+        "Apartamento 2 quartos, 72m², [Bairro] — R$[valor] — última unidade"
+      </div>
+      <div class="hook-item">"Sobrado com quintal em [Bairro] por R$[valor] — entrada a partir de R$[X]"</div>
+      <div class="hook-item">"Cobertura com vista para [referência] em [Cidade] — disponível agora"</div>
+    </div>
+
+    <div class="hook-group">
+      <div class="hook-group-title">Urgência / Escassez</div>
+      <div class="hook-item">"Esse imóvel não vai estar disponível essa semana."</div>
+      <div class="hook-item">"Última unidade nessa faixa de preço no [Bairro]."</div>
+      <div class="hook-item">"Com os juros do jeito que estão, esse momento não dura."</div>
+    </div>
+
+    <div class="hook-group">
+      <div class="hook-group-title">Contradição — Resultado Inesperado</div>
+      <div class="hook-item">
+        <div class="hook-formula">Fórmula: [resultado surpreendente] + apesar de + [obstáculo esperado]</div>
+        "Esse imóvel ficou 6 meses parado. Mudamos uma coisa. Vendido em 48h."
+      </div>
+      <div class="hook-item">"Esse comprador ganhou na disputa oferecendo menos. Veja o que fez diferente."</div>
+      <div class="hook-item">"Listamos R$50k acima do mercado. Ainda assim: múltiplas propostas em 24h."</div>
+    </div>
+
+    <div class="hook-group">
+      <div class="hook-group-title">Revelação de Segredo</div>
+      <div class="hook-item">
+        <div class="hook-formula">Fórmula: O que [autoridade] não te conta sobre + [assunto específico]</div>
+        "O que os corretores de alto padrão não contam sobre home staging acima de R$2M"
+      </div>
+      <div class="hook-item">"A única coisa que o laudo técnico nunca menciona — e que custa caro pro comprador"</div>
+    </div>
+
+    <div class="hook-group">
+      <div class="hook-group-title">Alerta de Erro</div>
+      <div class="hook-item">
+        <div class="hook-formula">Fórmula: Para de / Não + [ação comum] + antes de + [saber isso]</div>
+        "Para de visitar imóvel antes de verificar essas 3 coisas."
+      </div>
+      <div class="hook-item">"Nunca agende open house sem fazer ISSO primeiro."</div>
+      <div class="hook-item">"Não liste seu imóvel agora — espera esse momento passar."</div>
+    </div>
+
+    <div class="hook-group">
+      <div class="hook-group-title">Transformação</div>
+      <div class="hook-item">
+        <div class="hook-formula">Fórmula: De [estado negativo] para [estado positivo] em [tempo/método]</div>
+        "De aluguel de R$2.800 para prestação de R$2.200 — e ainda sobrou."
+      </div>
+      <div class="hook-item">"Como essa família saiu do aluguel em 90 dias sem juntar entrada."</div>
+      <div class="hook-item">"Do imóvel ignorado às múltiplas propostas — sem reformar nada."</div>
+    </div>
+  </section>
+
+  <!-- CHECKLIST -->
+  <section class="section" id="checklist">
+    <div class="section-header">
+      <div class="section-icon">✅</div>
+      <div>
+        <div class="section-title">Checklist de Produção</div>
+        <div class="section-sub">Preencher para cada imóvel, antes de filmar</div>
+      </div>
+    </div>
+
+    <div class="grid-2" style="margin-bottom:16px">
+      <div class="card">
+        <div class="card-title">Antes de filmar</div>
+        <div style="font-size:13px;color:var(--text-muted);line-height:1.7">
+          <strong style="color:var(--text)">Definir antes de ligar a câmera:</strong><br><br>
+          • Qual é o público desse imóvel? (1ª compra, upsizer, investidor)<br>
+          • Qual formato usar? (matriz de decisão acima)<br>
+          • Qual hook? (banco de hooks acima)<br>
+          • Qual é a feature única? O que só esse imóvel tem?<br>
+          • O imóvel está limpo e preparado?
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-title">Para cada imóvel, criar no mínimo</div>
+        <div style="font-size:13px;color:var(--text-muted);line-height:1.9">
+          📹 <strong style="color:var(--text)">1 vídeo tour</strong> — 30–45s, 9:16<br>
+          ⚡ <strong style="color:var(--text)">1 hook curto</strong> — 10–15s, 9:16<br>
+          🖼 <strong style="color:var(--text)">1 carrossel</strong> — 5–8 fotos + copy em cada card<br>
+          📄 <strong style="color:var(--text)">1 imagem estática</strong> — copy de urgência/especificidade<br>
+          ✍️ <strong style="color:var(--text)">3 variações de copy</strong> — dor / lifestyle / especificidade
+        </div>
+      </div>
+    </div>
+
+    <div class="check-group">
+      <div class="check-header">📱 Na filmagem</div>
+      <div class="check-item"><div class="check-box"></div><span><strong>Limpar a lente</strong> — faz enorme diferença na qualidade</span></div>
+      <div class="check-item"><div class="check-box"></div><span><strong>Filmar em 1x</strong> — não usar 0.5x (fica embaçado) nem zoom</span></div>
+      <div class="check-item"><div class="check-box"></div><span><strong>Duas mãos no celular</strong>, braços colados ao corpo — mover o corpo, não os braços</span></div>
+      <div class="check-item"><div class="check-box"></div><span><strong>Clips de 3–5s cada</strong> na filmagem — ficam 1s na edição</span></div>
+      <div class="check-item"><div class="check-box"></div><span><strong>Começar pelos ambientes mais impactantes</strong> — o melhor clip vai abrir o vídeo</span></div>
+      <div class="check-item"><div class="check-box"></div><span><strong>Filmar o mesmo ambiente em 3 ângulos</strong> — mais opções na edição</span></div>
+      <div class="check-item"><div class="check-box"></div><span><strong>B-roll de detalhes:</strong> maçaneta, torneira, janela, luz entrando, acabamentos</span></div>
+      <div class="check-item"><div class="check-box"></div><span><strong>Exterior e localização</strong> — fachada, rua, contexto de bairro</span></div>
+    </div>
+
+    <div class="check-group">
+      <div class="check-header">✂️ Na edição</div>
+      <div class="check-item"><div class="check-box"></div><span><strong>Abrir com o melhor clip</strong> — nunca guardar o melhor para o final</span></div>
+      <div class="check-item"><div class="check-box"></div><span><strong>Clips de 1 segundo ou menos</strong> no reel final</span></div>
+      <div class="check-item"><div class="check-box"></div><span><strong>Total do vídeo:</strong> 10–30s (walk & talk até 45s)</span></div>
+      <div class="check-item"><div class="check-box"></div><span><strong>Texto na tela:</strong> fonte simples, centralizado, com o nome da cidade</span></div>
+      <div class="check-item"><div class="check-box"></div><span><strong>Áudio:</strong> trending com seta ↑ ou clássico que combine com o imóvel</span></div>
+      <div class="check-item"><div class="check-box"></div><span><strong>Sem silêncio no início</strong> — música ou fala começa no primeiro frame</span></div>
+      <div class="check-item"><div class="check-box"></div><span><strong>Criar dentro do Instagram ou Edits app</strong> — não exportar do Canva</span></div>
+    </div>
+
+    <div class="check-group">
+      <div class="check-header">📤 No post</div>
+      <div class="check-item"><div class="check-box"></div><span><strong>Caption:</strong> hook → benefícios → dado concreto → palavra-chave CTA</span></div>
+      <div class="check-item"><div class="check-box"></div><span><strong>Hashtags:</strong> cidade + bairro + tipo de imóvel (5–10 tags)</span></div>
+      <div class="check-item"><div class="check-box"></div><span><strong>Horário:</strong> terça a quinta, 10h–12h ou 18h–20h</span></div>
+      <div class="check-item"><div class="check-box"></div><span><strong>Responder comentários</strong> nas primeiras 2 horas (sinal para o algoritmo)</span></div>
+      <div class="check-item"><div class="check-box"></div><span><strong>Follow-up no Direct</strong> em até 2h — enviar link → fazer 1 pergunta → ouvir → vender a visita</span></div>
+    </div>
+  </section>
+
+  <!-- CALENDÁRIO -->
+  <section class="section" id="calendario">
+    <div class="section-header">
+      <div class="section-icon">📅</div>
+      <div>
+        <div class="section-title">Calendário Semanal</div>
+        <div class="section-sub">Modelos de semana-tipo para diferentes situações</div>
+      </div>
+    </div>
+
+    <div class="card" style="margin-bottom:16px">
+      <div class="card-title" style="margin-bottom:14px">Semana com 1 imóvel novo — 4 posts</div>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr><th>Dia</th><th>Pilar</th><th>Formato</th><th>Hook</th><th>CTA</th></tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="cal-day">Ter</td>
+              <td><span class="tag tag-yellow">Listagem</span></td>
+              <td>Reveal ou Drone</td>
+              <td>Curiosidade / Urgência</td>
+              <td>"Comenta QUERO"</td>
+            </tr>
+            <tr>
+              <td class="cal-day">Qua</td>
+              <td><span class="tag tag-purple">Mercado Local</span></td>
+              <td>Tour do Bairro</td>
+              <td>Especificidade</td>
+              <td>"Comenta [BAIRRO]"</td>
+            </tr>
+            <tr>
+              <td class="cal-day">Qui</td>
+              <td><span class="tag tag-yellow">Listagem</span></td>
+              <td>Feature Única ou Walk & Talk</td>
+              <td>POV / Lifestyle</td>
+              <td>"Chama no Direct"</td>
+            </tr>
+            <tr>
+              <td class="cal-day">Sex</td>
+              <td><span class="tag tag-green">Educacional</span></td>
+              <td>Carrossel de dicas</td>
+              <td>Erro / Alerta</td>
+              <td>"Salva pra não perder"</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div style="margin-top:12px;font-size:12px;color:var(--text-faint)">2 posts sobre o mesmo imóvel, formatos e hooks diferentes. Nenhuma repetição.</div>
+    </div>
+
+    <div class="card" style="margin-bottom:16px">
+      <div class="card-title" style="margin-bottom:14px">Semana sem imóvel novo — 4 posts</div>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr><th>Dia</th><th>Pilar</th><th>Formato</th><th>Ideia</th></tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="cal-day">Ter</td>
+              <td><span class="tag tag-green">Educacional</span></td>
+              <td>Reel talking head</td>
+              <td>"3 erros que quem compra imóvel comete"</td>
+            </tr>
+            <tr>
+              <td class="cal-day">Qua</td>
+              <td><span class="tag tag-purple">Mercado Local</span></td>
+              <td>Carrossel</td>
+              <td>"5 coisas novas no [Bairro] esse mês"</td>
+            </tr>
+            <tr>
+              <td class="cal-day">Qui</td>
+              <td><span class="tag tag-blue">Personalidade</span></td>
+              <td>Reel bastidores</td>
+              <td>"Como é meu dia de visita a imóveis"</td>
+            </tr>
+            <tr>
+              <td class="cal-day">Sex</td>
+              <td><span class="tag tag-yellow">Listagem</span></td>
+              <td>Carrossel de portfólio</td>
+              <td>"Imóveis disponíveis agora em [Cidade]"</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div style="margin-top:12px;font-size:12px;color:var(--text-faint)">Dica: pedir permissão a outros corretores para mostrar imóveis deles. Dar crédito na legenda. Multiplica o conteúdo sem depender de carteira própria.</div>
+    </div>
+
+    <div class="card">
+      <div class="card-title" style="margin-bottom:14px">Semana de lançamento — 6 posts</div>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr><th>Dia</th><th>Pilar</th><th>Formato</th><th>Objetivo</th></tr>
+          </thead>
+          <tbody>
+            <tr><td class="cal-day">Seg</td><td><span class="tag tag-green">Educacional</span></td><td>Reel</td><td>Aquecer audiência antes do lançamento</td></tr>
+            <tr><td class="cal-day">Ter</td><td><span class="tag tag-yellow">Listagem</span></td><td>Drone + Reveal</td><td>Lançar o imóvel principal</td></tr>
+            <tr><td class="cal-day">Qua</td><td><span class="tag tag-purple">Mercado Local</span></td><td>Tour do Bairro</td><td>Reforçar a localização</td></tr>
+            <tr><td class="cal-day">Qui</td><td><span class="tag tag-yellow">Listagem</span></td><td>Walk & Talk</td><td>Mostrar o corretor dentro do imóvel</td></tr>
+            <tr><td class="cal-day">Sex</td><td><span class="tag tag-yellow">Listagem</span></td><td>Comparativo de Preço</td><td>Quebrar objeção de quem hesita</td></tr>
+            <tr><td class="cal-day">Sab</td><td><span class="tag tag-blue">Personalidade</span></td><td>Stories / Reel rápido</td><td>Urgência: "ainda tem unidade?"</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div style="margin-top:12px;font-size:12px;color:var(--text-faint)">6 posts sobre o mesmo imóvel. Ângulos e formatos diferentes em cada. Nenhum hook repetido.</div>
+    </div>
+  </section>
+
+  <!-- PERFORMANCE -->
+  <section class="section" id="performance">
+    <div class="section-header">
+      <div class="section-icon">📊</div>
+      <div>
+        <div class="section-title">Métricas de Performance</div>
+        <div class="section-sub">O que acompanhar e o que significa cada número</div>
+      </div>
+    </div>
+
+    <div class="highlight red" style="margin-bottom:20px">
+      <div class="hl-label">Atenção</div>
+      <div class="hl-text">Likes não indicam venda. <strong>Salvamentos e DMs indicam.</strong> Otimizar para o que converte, não para o que parece bem no feed.</div>
+    </div>
+
+    <div class="grid-3" style="margin-bottom:16px">
+      <div class="metric-card">
+        <div class="metric-name">Alcance</div>
+        <div class="metric-val" style="color:var(--accent)">≥ 2× seguidores</div>
+        <div class="metric-desc">Se o alcance supera 2× sua base, o algoritmo está distribuindo para não-seguidores</div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-name">Retenção de vídeo</div>
+        <div class="metric-val" style="color:var(--accent)">≥ 50%</div>
+        <div class="metric-desc">Para vídeos abaixo de 30 segundos. Abaixo de 30% = hook fraco ou clip de abertura ruim</div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-name">Salvamentos</div>
+        <div class="metric-val" style="color:var(--accent)">≥ 1% do alcance</div>
+        <div class="metric-desc">Indica que o conteúdo tem valor real — especialmente em posts educacionais</div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-name">Comentários com CTA</div>
+        <div class="metric-val" style="color:var(--yellow)">1+ por post</div>
+        <div class="metric-desc">Em posts de listagem: pelo menos 1 comentário com a palavra-chave = lead declarado</div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-name">DMs recebidos</div>
+        <div class="metric-val" style="color:var(--yellow)">1+ por post</div>
+        <div class="metric-desc">Lead quente. Contato espontâneo é o sinal mais forte de interesse real</div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-name">Visitas ao perfil</div>
+        <div class="metric-val" style="color:var(--purple-light)">≥ 5% do alcance</div>
+        <div class="metric-desc">Indica que o viewer quis saber mais sobre quem postou</div>
+      </div>
+    </div>
+
+    <div class="card" style="margin-bottom:12px">
+      <div class="card-title">Quando mudar de formato ou hook</div>
+      <div class="grid-2">
+        <div>
+          <div style="font-size:12px;font-weight:800;color:var(--red);margin-bottom:10px;text-transform:uppercase;letter-spacing:0.08em">Sinais para mudar</div>
+          <div style="font-size:13px;color:var(--text-muted);line-height:1.8">
+            → 3 posts seguidos com alcance abaixo de 1,5× seguidores<br>
+            → Retenção abaixo de 30% nos primeiros 3s<br>
+            → Nenhum DM ou comentário com palavra-chave em 3 posts<br>
+            → Muitos likes, zero DMs (entretenimento sem conversão)
+          </div>
+        </div>
+        <div>
+          <div style="font-size:12px;font-weight:800;color:var(--accent);margin-bottom:10px;text-transform:uppercase;letter-spacing:0.08em">Sinais para manter</div>
+          <div style="font-size:13px;color:var(--text-muted);line-height:1.8">
+            → Qualquer post que gerou DM espontâneo<br>
+            → Salvamento acima de 1,5% do alcance<br>
+            → Alcance ≥ 3× seguidores<br>
+            → Comentários com perguntas reais sobre o imóvel
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Regra dos 3 — antes de descartar qualquer formato</div>
+      <div style="font-size:13px;color:var(--text-muted);line-height:1.7">Um post ruim pode ser problema de dia, horário, imóvel ou momento — não necessariamente do formato. Rodar cada formato pelo menos <strong style="color:var(--text)">3 vezes</strong> antes de decidir se funciona ou não.</div>
+      <div class="divider"></div>
+      <div style="font-size:13px;color:var(--text-muted)"><strong style="color:var(--text)">Quando impulsionar com tráfego pago:</strong> apenas quando o post orgânico já gerou pelo menos 1 DM espontâneo e o alcance foi ≥ 2× seguidores. Tráfego pago amplifica o que já funciona — não cria o que não existe.</div>
+    </div>
+  </section>
+
+</main>
+
+<script>
+  function toggleSidebar() {
+    document.getElementById('sidebar').classList.toggle('open');
+    document.getElementById('overlay').classList.toggle('open');
+  }
+
+  // Active sidebar link on scroll
+  const sections = document.querySelectorAll('.section');
+  const links = document.querySelectorAll('.sidebar-link');
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        links.forEach(l => l.classList.remove('active'));
+        const active = document.querySelector(`.sidebar-link[href="#${e.target.id}"]`);
+        if (active) active.classList.add('active');
+      }
+    });
+  }, { rootMargin: '-30% 0px -60% 0px' });
+  sections.forEach(s => observer.observe(s));
+</script>
+
+</body>
+</html>
